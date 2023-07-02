@@ -58,21 +58,31 @@
         </v-card-text>
       </v-card>
     </form>
+    <v-snackbar
+        color="red"
+        v-model="snackbar"
+        :timeout="2000"
+    >
+      Wrong login or password
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import {ref, watch} from "vue";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
 export default {
   name: "LoginForm",
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     const visible = ref(false);
     const loginValue = ref('');
     const passwordValue = ref('');
+    const snackbar=ref(false)
 
     watch(passwordValue, () => {
       if (passwordValue.value === '') {
@@ -82,16 +92,22 @@ export default {
 
     const login = (event) => {
       event.preventDefault();
-      if (loginValue.value === "John") {
-        router.push("/profile");
-      } else {
+      const user = store.state.userList.find(item => item.login === loginValue.value);
+      if (user!==undefined&&passwordValue.value === user.password) {
+          store.commit('handleChangeUser', loginValue.value)
+          router.push("/profile");
+      }
+      else {
+        snackbar.value=true
+        loginValue.value=''
+        passwordValue.value=''
       }
     };
     const toggleLVisibility = () => {
       visible.value = !visible.value
     };
 
-    return {loginValue, passwordValue, visible, toggleLVisibility, login};
+    return {loginValue,snackbar ,passwordValue, visible, toggleLVisibility, login};
   },
 };
 </script>

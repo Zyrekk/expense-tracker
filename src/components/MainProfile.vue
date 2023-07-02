@@ -16,7 +16,7 @@
                 src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
             ></v-img>
           </v-avatar>
-          <v-card-text class="text-white text-h5 mb-3">Konrad Żyra</v-card-text>
+          <v-card-text class="text-white text-h5 mb-3">{{ currentUser.name }} {{ currentUser.lastName }}</v-card-text>
           <v-card
               class="mb-5"
               color="white"
@@ -26,7 +26,7 @@
               <v-btn icon="mdi-account"></v-btn>
 
               <v-card-text class="text-left font-weight-light">
-                User Profile
+                Edit user profile
               </v-card-text>
 
               <v-spacer></v-spacer>
@@ -49,6 +49,8 @@
                   base-color="black"
                   color="#06dec3"
                   label="Name"
+                  v-model="newName"
+                  :model-value="newName"
               ></v-text-field>
 
               <v-text-field
@@ -56,6 +58,8 @@
                   base-color="black"
                   color="#06dec3"
                   label="Last name"
+                  v-model="newLastName"
+                  :model-value="newLastName"
               ></v-text-field>
             </v-card-text>
 
@@ -83,31 +87,8 @@
               Your profile has been updated
             </v-snackbar>
           </v-card>
-<!--          <v-card-->
-<!--              class="mx-auto"-->
-<!--              color="white"-->
-<!--              width="90%"-->
-<!--              max-width="344"-->
-
-<!--          >-->
-<!--            <v-card-item>-->
-<!--              <div>-->
-<!--                <div class="text-overline mb-1">-->
-<!--                  Latest expense-->
-<!--                </div>-->
-
-<!--                <div class="text-caption">1547$ - 2023.11.09</div>-->
-<!--              </div>-->
-<!--            </v-card-item>-->
-
-<!--            <v-card-actions>-->
-<!--              <v-btn variant="outlined">-->
-<!--                Button-->
-<!--              </v-btn>-->
-<!--            </v-card-actions>-->
-<!--          </v-card>-->
           <v-card
-          width="90%"
+              width="90%"
           >
             <v-tabs
                 v-model="tab"
@@ -132,8 +113,8 @@
             <v-window v-model="tab">
               <v-window-item v-for="item in data" :key="item" :value="'tab-' + item.name">
                 <v-card class="d-flex justify-space-around">
-                  <v-card-text>{{item.price}}</v-card-text>
-                  <v-card-text>{{item.date}}</v-card-text>
+                  <v-card-text>{{ item.price }}</v-card-text>
+                  <v-card-text>{{ item.date }}</v-card-text>
                 </v-card>
               </v-window-item>
             </v-window>
@@ -147,29 +128,65 @@
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
 import {ref} from "vue";
+import {useStore} from "vuex";
 
 export default {
   name: "MainProfile",
   components: {NavigationBar},
-  setup(){
+  setup() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-    const tab=ref(null);
-    const data=ref([{name:'latest',price:'196$',date:'12-06-2023'},{name:'most',price:'1961$',date:'11-02-2021'}]);
-    const hasSaved=ref(false);
-    const isEditing=ref(false);
 
-    const edit=()=>{
-        isEditing.value=!isEditing.value;
-    }
-    const save=()=>{
-      hasSaved.value=true;
-      console.log('saved');
+    const store = useStore()
+    const tab = ref(null);
+    const currentUserName = ref(store.state.currentUserName);
+    const currentUser = ref(store.state.userList.find(item => item.login === currentUserName.value));
+    const newName=ref(currentUser.value.name)
+    const newLastName=ref(currentUser.value.lastName)
+
+    let maxAmount = 0;
+    let maxDate = null;
+
+    for (const expense of currentUser.value.expenses) {
+      if (expense.amount > maxAmount) {
+        maxAmount = expense.amount;
+        maxDate = expense.date;
+      }
     }
 
-    return{hasSaved,isEditing,tab,data,edit,save}
+    const data = ref([
+      {
+        name: 'latest',
+        price: currentUser.value.expenses[currentUser.value.expenses.length - 1].amount + ' PLN',
+        date: currentUser.value.expenses[currentUser.value.expenses.length - 1].date
+      },
+      {
+        name: 'most',
+        price: maxAmount + ' PLN',
+        date: maxDate
+      }]);
+    const hasSaved = ref(false);
+    const isEditing = ref(false);
+
+    const edit = () => {
+      isEditing.value = !isEditing.value;
+    }
+    const save = () => {
+      const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+
+      store.commit('handleUserDetailsChange', {
+        login: currentUserName.value,
+        name: newName.value?newName.value:currentUser.value.name,
+        lastName: newLastName.value?newLastName.value:currentUser.value.lastName,
+        index: index
+      });
+      hasSaved.value = true;
+      isEditing.value=false
+    }
+
+    return {currentUser,newName,newLastName, hasSaved, isEditing, tab, data, edit, save}
   }
 }
 </script>
@@ -182,7 +199,7 @@ export default {
   display: flex;
 }
 
-.card__flex{
+.card__flex {
   background: #1b1b1b;
   width: 70%;
   display: flex;
@@ -190,7 +207,7 @@ export default {
   align-items: center;
 }
 
-.card-content{
+.card-content {
   border-radius: 10px 10px 0 0;
   position: relative;
   display: flex;
@@ -201,7 +218,7 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
-  .card-content{
+  .card-content {
     width: 100%;
   }
 }
