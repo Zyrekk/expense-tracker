@@ -71,17 +71,18 @@
   <v-card class="nav">
     <v-layout>
       <v-navigation-drawer
-          color="#3f3d56"
+          color="#1b1b1b"
           v-model="drawer"
           :rail="rail"
           permanent
           @click="rail = false"
       >
         <v-list-item
-            class="pt-10 item"
+            class="pt-10 font-color"
             prepend-avatar="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
             title="John Leider"
             nav
+
         >
           <template v-slot:append>
             <v-btn
@@ -95,12 +96,12 @@
         <v-divider></v-divider>
 
         <v-list density="compact" nav>
-          <v-list-item class="item" prepend-icon="mdi-home-outline" title="Dashboard" value="dashboard"></v-list-item>
-          <v-list-item class="item" prepend-icon="mdi-account-outline" title="Profile" value="profile"></v-list-item>
-          <v-list-item class="item" prepend-icon="mdi-currency-usd" title="Expenses" value="expenses"></v-list-item>
-          <v-list-item class="item" prepend-icon="mdi-file-document-outline" title="Reports" value="reports"></v-list-item>
-          <v-list-item class="item" prepend-icon="mdi-cog-outline" title="Settings" value="settings"></v-list-item>
-          <v-list-item @click="logout" class="item" prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
+          <v-list-item :active="isActive('/dashboard')" @click="handlePageChange('dashboard')" color="white" base-color="#06dec3" prepend-icon="mdi-home-outline" title="Dashboard" value="dashboard"></v-list-item>
+          <v-list-item :active="isActive('/profile')" @click="handlePageChange('profile')" color="white" base-color="#06dec3" prepend-icon="mdi-account-outline" title="Profile" value="profile"></v-list-item>
+          <v-list-item :active="isActive('/expenses')" @click="handlePageChange('expenses')" color="white" base-color="#06dec3" prepend-icon="mdi-currency-usd" title="Expenses" value="expenses"></v-list-item>
+          <v-list-item :active="isActive('/reports')" @click="handlePageChange('reports')" color="white" base-color="#06dec3" prepend-icon="mdi-file-document-outline" title="Reports" value="reports"></v-list-item>
+          <v-list-item :active="isActive('/settings')" @click="handlePageChange('settings')" color="white" base-color="#06dec3" prepend-icon="mdi-cog-outline" title="Settings" value="settings"></v-list-item>
+          <v-list-item @click="handlePageChange('login')" color="white" base-color="#06dec3" prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main style="height: 250px"></v-main>
@@ -124,22 +125,16 @@ export default {
     FontAwesomeIcon
   },
   setup() {
-    const store = useStore()
     const router=useRouter()
-    const currentPage = ref(store.state.page)
-    watch(currentPage, () => {
-      console.log(currentPage)
-    })
+    const isActive=(path)=>{
+      return path === router.currentRoute.value.path;
 
-    const handlePageChange = (page) => {
-      store.commit('handlePageChange', page)
-      currentPage.value = store.state.page
     }
-    const logout = () => {
-        router.push("/login");
-    };
+    const handlePageChange = (page) => {
+      router.push(`/${page}`);
+    }
 
-    return {currentPage, handlePageChange,logout}
+    return {handlePageChange,isActive}
   },
   data() {
     return {
@@ -154,15 +149,10 @@ export default {
 <style scoped lang="scss">
 $primary-color: #06dec3;
 
-.item{
-  color:#06dec3;
-}
-
 .navigation {
   z-index: 10;
   height: 100vh;
   width: 15rem;
-  background: #3f3d56;
 }
 
 .navigation__header {
@@ -236,6 +226,10 @@ $primary-color: #06dec3;
 .nav {
   position: absolute;
   z-index: 100;
+}
+
+.font-color{
+  color:#06dec3
 }
 
 

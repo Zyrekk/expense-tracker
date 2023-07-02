@@ -1,27 +1,28 @@
 <template>
   <div class="login">
-    <form class="mx-3">
+    <form class="mx-3" v-on:submit="login($event)">
       <v-card
           class="mx-auto pt-5 px-12 pb-8 login__font-color"
           elevation="8"
           max-width="448"
           min-height="458"
           rounded="lg"
-          color="#3f3d56"
+
       >
         <v-img
             class="mx-auto py-6"
             max-width="228"
             :src="require('../assets/parleto_logo.png')"
         ></v-img>
-        <div class="text-h6 ">Sign in</div>
+        <div class="text-h6 ">Login</div>
 
         <v-text-field
             v-model="loginValue"
             density="compact"
             placeholder="Login"
             clearable
-            prepend-inner-icon="mdi-account"
+            prepend-inner-icon="mdi-account-outline"
+            required="true"
             variant="outlined"
         ></v-text-field>
 
@@ -34,6 +35,7 @@
             clearable
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
+            required="true"
             @click:append-inner="toggleLVisibility"
         ></v-text-field>
 
@@ -43,7 +45,7 @@
             class="mb-8"
             color="#06dec3"
             size="large"
-            @click="login"
+            type="submit"
         >
           Log in
         </v-btn>
@@ -78,7 +80,8 @@ export default {
       }
     })
 
-    const login = () => {
+    const login = (event) => {
+      event.preventDefault();
       if (loginValue.value === "John") {
         router.push("/profile");
       } else {
@@ -106,7 +109,7 @@ $primary-color: #06dec3;
 }
 
 .login__font-color {
-  color: #ffffff;
+  color: #000000;
 }
 
 .text-h6 {

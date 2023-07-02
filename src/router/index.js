@@ -25,6 +25,11 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: LoginView
+  }
 ]
 
 const router = createRouter({

@@ -1,13 +1,16 @@
 <template>
-<div>
-  siema
-</div>
+  <div>
+    <DashBoardComponent/>
+  </div>
 </template>
 
 <script>
+import DashBoardComponent from "@/components/DashBoardComponent.vue";
+
 export default {
   name: 'DashBoard',
   components: {
+    DashBoardComponent
   }
 }
 </script>

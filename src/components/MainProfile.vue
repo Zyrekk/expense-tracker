@@ -1,6 +1,5 @@
 <template>
   <div class="profile">
-      <NavigationBar/>
     <v-card
         class="card"
         height="100%"
@@ -31,7 +30,7 @@ export default {
   setup(){
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // Optional: Add smooth scrolling effect
+      behavior: 'smooth'
     });
   }
 }
@@ -46,6 +45,7 @@ export default {
 }
 
 .card__flex{
+  background: #1b1b1b;
   width: 70%;
   display: flex;
   justify-content: center;
@@ -57,7 +57,8 @@ export default {
   position: relative;
   margin: 50px 20px 50px 76px;
   width: 70%;
-  background: #3f3d56;
+  background: rgba(255, 255, 255, 0.16);
+  border: 2px solid #06dec3;
 }
 
 .avatar{

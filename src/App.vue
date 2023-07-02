@@ -1,10 +1,15 @@
 <template>
+
   <router-view v-slot="{ Component }">
+    <NavigationBar v-if="this.$route.path!=='/login'&&this.$route.path!=='/register'" />
     <transition name="route" mode="out-in">
       <component :is="Component"></component>
     </transition>
   </router-view>
 </template>
+<script setup>
+import NavigationBar from "@/components/NavigationBar.vue";
+</script>
 
 <style>
 body {
@@ -12,7 +17,7 @@ body {
   text-align: center;
   /*color: #2c3e50;*/
   margin: 0;
-  /*background: #f2f2f2;*/
+  background: #1b1b1b;
 }
 
 /* route transitions */
@@ -20,13 +25,16 @@ body {
   opacity: 0;
   transform: translateX(100px);
 }
+
 .route-enter-active {
   transition: all 0.3s ease-out;
 }
+
 .route-leave-to {
   opacity: 0;
   transform: translateX(-100px);
 }
+
 .route-leave-active {
   transition: all 0.3s ease-in;
 }
