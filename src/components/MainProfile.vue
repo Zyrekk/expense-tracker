@@ -151,27 +151,22 @@ import {ref} from "vue";
 export default {
   name: "MainProfile",
   components: {NavigationBar},
-  data() {
-    return {
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    }
-  },
   setup(){
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-    const tab=ref(null)
-    const data=ref([{name:'latest',price:'196$',date:'12-06-2023'},{name:'most',price:'1961$',date:'11-02-2021'}])
-    const hasSaved=ref(false)
-    const isEditing=ref(false)
+    const tab=ref(null);
+    const data=ref([{name:'latest',price:'196$',date:'12-06-2023'},{name:'most',price:'1961$',date:'11-02-2021'}]);
+    const hasSaved=ref(false);
+    const isEditing=ref(false);
 
     const edit=()=>{
-        isEditing.value=!isEditing.value
+        isEditing.value=!isEditing.value;
     }
     const save=()=>{
-      hasSaved.value=true
-      console.log('saved')
+      hasSaved.value=true;
+      console.log('saved');
     }
 
     return{hasSaved,isEditing,tab,data,edit,save}
