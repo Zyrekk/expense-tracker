@@ -10,22 +10,25 @@
       <v-card class="pt-16 card__flex" width="100%" flat>
         <div class="card-content">
           <div class="card-content__left">
-            <v-card class="width" color="">
-              <v-toolbar color="#06dec3">
+            <v-card class="width" height="60%" color="">
+              <v-toolbar color="#06dec3" height="30%">
                 <v-card-text class="font-size">Add a new expense category</v-card-text>
               </v-toolbar>
 
               <v-card-text>
+
+
                 <v-text-field
+                    class="font-color input-height"
                     base-color="black"
                     color="#06dec3"
                     variant="outlined"
                     label="Category"
-                    class="font-color"
                     placeholder="Category"
                     v-model="category"
-
+                    density="compact"
                 ></v-text-field>
+
 
                 <v-textarea
                     base-color="black"
@@ -35,6 +38,7 @@
                     class="font-color"
                     placeholder="Description"
                     no-resize
+                    density="compact"
                     v-model="description"
                 ></v-textarea>
               </v-card-text>
@@ -43,13 +47,12 @@
                 <v-spacer></v-spacer>
                 <v-btn
                        color="#06dec3"
-                       size="large"
                        variant="elevated"
                        type="submit" @click="handleAddItem"> Add</v-btn>
               </v-card-actions>
             </v-card>
             <v-card color="#1b1b1b" class="width" flat>
-              <v-card-text class="pt-15 mb-0 text-white font-size">Expense Categories</v-card-text>
+              <v-card-text class="pt-15 mb-0 text-white font-size__chart">Expense Categories</v-card-text>
               <v-expansion-panels color="#06dec3" variant="inset" class="d-inline-block  my-4">
                 <v-expansion-panel
                     class="mt-2"
@@ -61,7 +64,10 @@
               </v-expansion-panels>
             </v-card>
           </div>
-          <v-card>wykres</v-card>
+          <v-card color="#1b1b1b" class="chart-size mt-16 d-flex flex-column" flat>
+            <span class="pt-15 height mb-0 text-white font-size__chart">Quick overview of expenses</span>
+            <canvas id="myChart"></canvas>
+          </v-card>
         </div>
       </v-card>
     </v-card>
@@ -71,9 +77,32 @@
 <script>
 
 import {ref} from "vue";
+import Chart from 'chart.js/auto';
+import {useStore} from "vuex";
 
 export default {
   name: "DashboardComponent",
+  mounted() {
+    const store=useStore();
+    const ctx = document.getElementById('myChart');
+    const categories=store.state.categories.map((item)=>{
+      return item.name
+    })
+    const chartValues=store.state.categories.map((item)=>{
+      return item.summary
+    })
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: categories,
+        datasets: [{
+          label: 'Summary cost in PLN ',
+          data: chartValues,
+          borderWidth: 1
+        }]
+      },
+    });
+  },
   setup() {
     window.scrollTo({
       top: 0,
@@ -97,6 +126,7 @@ export default {
       description: "My car is broken"
     }])
 
+
     return {categoryList, category, description, handleAddItem}
   }
 }
@@ -108,8 +138,23 @@ export default {
   font-weight: 500;
 }
 
-.width {
+.font-size__chart{
+  font-size: 24px;
+  padding-bottom: 40px;
+  font-weight: 500;
+}
+
+.height{
+  height: fit-content;
+  line-height: 1.25rem;
+}
+
+.chart-size{
   width: 50%;
+}
+
+.width {
+  width: 60%;
 }
 
 .font-color {
@@ -147,12 +192,6 @@ export default {
   width: 100%;
 }
 
-.avatar {
-  z-index: 100;
-  top: -100px;
-  left: 0;
-}
-
 @media only screen and (max-width: 768px) {
   .width {
     width: 100%;
@@ -162,6 +201,9 @@ export default {
   }
   .card-content{
     flex-direction: column;
+  }
+  .chart-size{
+    width: 100%;
   }
 }
 

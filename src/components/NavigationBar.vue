@@ -82,7 +82,6 @@
             prepend-avatar="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
             title="John Leider"
             nav
-
         >
           <template v-slot:append>
             <v-btn
