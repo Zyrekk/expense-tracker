@@ -46,9 +46,9 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                       color="#06dec3"
-                       variant="elevated"
-                       type="submit" @click="handleAddItem"> Add</v-btn>
+                    color="#06dec3"
+                    variant="elevated"
+                    type="submit" @click="handleAddItem"> Add</v-btn>
               </v-card-actions>
             </v-card>
             <v-card color="#1b1b1b" class="width" flat>
@@ -85,11 +85,27 @@ export default {
   mounted() {
     const store=useStore();
     const ctx = document.getElementById('myChart');
-    const categories=store.state.categories.map((item)=>{
+    const categoryData = {};
+    const currentUserName = ref(store.state.currentUserName);
+    const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+
+    store.state.userList[index].expenses.forEach(expense => {
+      if (!categoryData[expense.category]) {
+        categoryData[expense.category] = {
+          name: expense.category,
+          amount: 0
+        };
+      }
+      categoryData[expense.category].amount += expense.amount;
+    });
+
+    const result = Object.values(categoryData);
+    console.log(result)
+    const categories=result.map((item)=>{
       return item.name
     })
-    const chartValues=store.state.categories.map((item)=>{
-      return item.summary
+    const chartValues=result.map((item)=>{
+      return item.amount
     })
     new Chart(ctx, {
       type: 'pie',
@@ -108,24 +124,27 @@ export default {
       top: 0,
       behavior: 'smooth'
     });
+
+    const store = useStore()
+    const currentUserName = ref(store.state.currentUserName);
+    // const currentUser = ref(store.state.userList.find(item => item.login === currentUserName.value));
+    const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+    const categoryList=ref(store.state.userList[index].categoriesList)
     const category = ref('')
     const description = ref('')
+
     const handleAddItem = () => {
-      categoryList.value.push({
-        name: category.value,
-        description: description.value
-      })
+      const indexToAdd=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+      store.commit('handleCategoryAdd', {
+        index: indexToAdd,
+        category:{
+          name: category.value,
+          description: description.value
+        }
+      });
       category.value = ''
       description.value = ''
     }
-    const categoryList = ref([{
-      name: "food",
-      description: "I like eat pizza"
-    }, {
-      name: "car",
-      description: "My car is broken"
-    }])
-
 
     return {categoryList, category, description, handleAddItem}
   }
@@ -189,6 +208,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: fit-content;
   width: 100%;
 }
 
