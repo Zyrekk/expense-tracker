@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from "@/views/RegisterView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import ExpensesView from "@/views/ExpensesView.vue";
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: ProfileView
+  },
+  {
+    path: '/expenses',
+    name: 'expenses',
+    component: ExpensesView
   },
   {
     path: '/:pathMatch(.*)*',
