@@ -7,7 +7,6 @@
           max-width="448"
           min-height="458"
           rounded="lg"
-          color="#3f3d56"
       >
         <v-img
             class="mx-auto py-6"
@@ -105,7 +104,7 @@ $primary-color: #06dec3;
 }
 
 .register__font-color {
-  color: #ffffff;
+  color: #000000;
 }
 
 .text-h6 {
