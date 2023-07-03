@@ -1,19 +1,17 @@
 <template>
-  <div class="dashboard pt-16">
-    <div class="dashboard__content pt-10">
-      <div class="w-75">
+  <div class="container pt-16">
+    <div class="container__content pt-10">
+      <div class="custom-width">
         <v-card class="w-100">
           <v-toolbar color="#06dec3" height="30%">
-            <v-card-text class="font-size">Add a new expense category</v-card-text>
+            <v-card-text class="container__font-size">Add a new expense category</v-card-text>
           </v-toolbar>
 
           <v-card-text>
 
 
             <v-text-field
-                class="font-color input-height"
                 base-color="black"
-                color="#06dec3"
                 variant="outlined"
                 label="Category"
                 placeholder="Category"
@@ -24,10 +22,9 @@
 
             <v-textarea
                 base-color="black"
-                color="#06dec3"
+
                 variant="outlined"
                 label="Description"
-                class="font-color"
                 placeholder="Description"
                 no-resize
                 density="compact"
@@ -45,9 +42,9 @@
           </v-card-actions>
         </v-card>
         <v-card color="#1b1b1b" class="w-100" flat>
-          <v-card-text v-if="!categoryList.length" class="text-red-accent-2 pt-15 mb-0 text-white font-size">Add categories to see a list of categories
+          <v-card-text v-if="!categoryList.length" class="text-red-accent-2 pt-15 mb-0 text-white container__font-size">Add categories to see a list of categories
           </v-card-text>
-          <v-card-text v-if="categoryList.length" class="pt-15 mb-0 text-white font-size">Expense Categories
+          <v-card-text v-if="categoryList.length" class="pt-15 mb-0 text-white container__font-size">Expense Categories
           </v-card-text>
           <v-expansion-panels color="#06dec3" variant="inset" class="d-inline-block  my-4">
             <v-expansion-panel
@@ -59,9 +56,9 @@
             ></v-expansion-panel>
           </v-expansion-panels>
         </v-card>
-        <v-card-text v-if="!expenses.length" class="text-red-accent-2 pt-15 mb-0 text-white font-size">Add expenses to see an expense chart</v-card-text>
+        <v-card-text v-if="!expenses.length" class="text-red-accent-2 pt-15 mb-0 text-white container__font-size">Add expenses to see an expense chart</v-card-text>
         <v-card v-if="expenses.length" color="#1b1b1b" class="w-100 d-flex flex-column align-center" flat>
-          <v-card-text class="pt-15 mb-0 text-white font-size">Expenses overview</v-card-text>
+          <v-card-text class="pt-15 mb-0 text-white container__font-size">Expenses overview</v-card-text>
           <v-card color="#1b1b1b" class="chart-size">
             <canvas v-if="categoryList.length" id="myChart"></canvas>
           </v-card>
@@ -98,7 +95,6 @@ export default {
     });
 
     const result = Object.values(categoryData);
-    console.log(result)
     const categories = result.map((item) => {
       return item.name
     })
@@ -153,41 +149,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.font-size {
-  font-size: 20px;
-  font-weight: 500;
-}
+@import "@/styles/styling.scss";
 
 .chart-size {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
-}
-
-.dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 100%;
-  min-height: 100vh;
-  background: #1b1b1b;
-}
-
-.dashboard__content {
-  display: flex;
-  position: relative;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 50px 20px 50px 76px;
   width: 70%;
 }
 
 @media only screen and (max-width: 768px) {
   .chart-size {
-    width: 100%;
+    width: 110%;
   }
 }
 

@@ -1,24 +1,24 @@
 <template>
-  <div class="reports pt-16">
-    <div class="reports__content pt-10">
-      <div class="w-75">
+  <div class="container pt-16">
+    <div class="container__content pt-10">
+      <div class="custom-width">
         <v-card v-if="!expenses.length" class="bg-red-accent-2">
-          <v-card-text class="font-size">Add categories and expenses to see reports</v-card-text>
+          <v-card-text class="container__font-size">Add categories and expenses to see reports</v-card-text>
         </v-card>
         <v-card v-if="expenses.length" class="w-100 d-flex flex-column" color="#1b1b1b">
 
           <v-card flat>
             <v-toolbar color="#06dec3">
-              <v-card-text class="font-size">The total amount of expenses</v-card-text>
+              <v-card-text class="container__font-size">The total amount of expenses</v-card-text>
             </v-toolbar>
             <v-card>
-              <v-card-text class="font-size">{{totalSum}} PLN</v-card-text>
+              <v-card-text class="container__font-size">{{totalSum}} PLN</v-card-text>
             </v-card>
           </v-card>
 
           <v-card class="mt-16">
             <v-toolbar color="#06dec3" height="30%">
-              <v-card-text class="font-size">Monthly expenses</v-card-text>
+              <v-card-text class="container__font-size">Monthly expenses</v-card-text>
             </v-toolbar>
             <v-table
                 fixed-header
@@ -30,7 +30,7 @@
                 <th class="text-center text-wrap">
                   Date
                 </th>
-                <th class="text-center  text-wrap">
+                <th class="text-center text-wrap">
                   Summary per date
                 </th>
               </tr>
@@ -48,7 +48,7 @@
           </v-card>
           <v-card class="mt-16">
             <v-toolbar color="#06dec3" height="30%">
-              <v-card-text class="font-size">Category expenses</v-card-text>
+              <v-card-text class="container__font-size">Category expenses</v-card-text>
             </v-toolbar>
             <v-table
                 fixed-header
@@ -60,7 +60,7 @@
                 <th class="text-center text-wrap">
                   Category
                 </th>
-                <th class="text-center  text-wrap">
+                <th class="text-center text-wrap">
                   Summary per category
                 </th>
               </tr>
@@ -164,30 +164,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.reports {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 100%;
-  min-height: 100vh;
-  background: #1b1b1b;
-}
-
-.reports__content {
-  display: flex;
-  position: relative;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 50px 20px 50px 76px;
-  width: 70%;
-}
-
-.font-size {
-  font-size: 20px;
-  font-weight: 500;
-}
+@import "@/styles/styling.scss";
 
 </style>

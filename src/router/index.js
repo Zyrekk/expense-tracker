@@ -5,6 +5,7 @@ import DashboardView from "@/views/DashboardView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import ExpensesView from "@/views/ExpensesView.vue";
 import ReportsView from "@/views/ReportsView.vue";
+import SettingsView from "@/views/SettingsView.vue";
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
     path: '/reports',
     name: 'reports',
     component: ReportsView
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: SettingsView
   },
   {
     path: '/:pathMatch(.*)*',

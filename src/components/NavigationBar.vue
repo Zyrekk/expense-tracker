@@ -1,72 +1,3 @@
-<!--<template>-->
-<!--  <aside class="navigation">-->
-<!--    <div class="navigation__header">-->
-<!--      <div class="navigation__logo">-->
-<!--        <a href="https://www.parleto.io">-->
-<!--          <img :src="logo" alt="logo"/>-->
-<!--        </a>-->
-<!--      </div>-->
-<!--      <nav class="navigation__content">-->
-<!--        <ul class="navigation__links-list">-->
-<!--          <li v-on:click="handlePageChange('dashboard')" class="navigation__single-link" :class="{'navigation__single-link&#45;&#45;active':currentPage==='dashboard'}">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['fas', 'table']"/>-->
-<!--            <span class="navigation__link-text">Dashboard</span>-->
-<!--          </li>-->
-<!--          <li v-on:click="handlePageChange('profile')" class="navigation__single-link" :class="{'navigation__single-link&#45;&#45;active':currentPage==='profile'}">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['far', 'user']"/>-->
-<!--            <span class="navigation__link-text">Profile</span>-->
-<!--          </li>-->
-<!--          <li v-on:click="handlePageChange('expenses')" class="navigation__single-link" :class="{'navigation__single-link&#45;&#45;active':currentPage==='expenses'}">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['fas', 'dollar-sign']"/>-->
-<!--            <span class="navigation__link-text">Expenses</span>-->
-<!--          </li>-->
-<!--          <li v-on:click="handlePageChange('reports')" class="navigation__single-link" :class="{'navigation__single-link&#45;&#45;active':currentPage==='reports'}">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['fas', 'file']"/>-->
-<!--            <span class="navigation__link-text">Reports</span>-->
-<!--          </li>-->
-<!--          <li v-on:click="handlePageChange('settings')" class="navigation__single-link" :class="{'navigation__single-link&#45;&#45;active':currentPage==='settings'}">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['fas', 'gear']"/>-->
-<!--            <span class="navigation__link-text">Settings</span>-->
-<!--          </li>-->
-<!--          <li class="navigation__single-link">-->
-<!--            <font-awesome-icon class="navigation-icon" :icon="['fas', 'right-from-bracket']"/>-->
-<!--            <span class="navigation__link-text">Log out</span>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </aside>-->
-
-<!--</template>-->
-<!--<template>-->
-<!--  <v-card>-->
-<!--    <v-layout>-->
-<!--      <v-navigation-drawer-->
-<!--          expand-on-hover-->
-<!--          rail-->
-<!--      >-->
-<!--        <v-list>-->
-<!--          <v-list-item-->
-<!--              prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"-->
-<!--              title="Sandra Adams"-->
-<!--              subtitle="sandra_a88@gmailcom"-->
-<!--          ></v-list-item>-->
-<!--        </v-list>-->
-
-<!--        <v-divider></v-divider>-->
-
-<!--        <v-list density="compact" nav>-->
-<!--          <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>-->
-<!--          <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared"></v-list-item>-->
-<!--          <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>-->
-<!--        </v-list>-->
-<!--      </v-navigation-drawer>-->
-
-<!--      <v-main style="height: 250px"></v-main>-->
-<!--    </v-layout>-->
-<!--  </v-card>-->
-<!--</template>-->
-
 <template>
   <v-card class="nav">
     <v-layout>
@@ -75,7 +6,7 @@
           v-model="drawer"
           :rail="rail"
           permanent
-          @click="rail = false"
+          @click="rail = !rail"
       >
         <v-list-item
             class="pt-10 font-color"
@@ -87,7 +18,6 @@
             <v-btn
                 variant="text"
                 icon="mdi-chevron-left"
-                @click.stop="rail = !rail"
             ></v-btn>
           </template>
         </v-list-item>
@@ -103,7 +33,6 @@
           <v-list-item @click="handlePageChange('login')" color="white" base-color="#06dec3" prepend-icon="mdi-logout" title="Logout" value="logout"></v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-main style="height: 250px"></v-main>
     </v-layout>
   </v-card>
 </template>
@@ -129,114 +58,23 @@ export default {
     const currentUserName = ref(store.state.currentUserName);
     const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
     const user = index!==-1? store.state.userList[index]:{name:'no',lastName: 'name'}
+    const drawer=ref(true)
+    const rail=ref(true)
+    const logo=require('../assets/parleto_logo.png')
     const isActive=(path)=>{
       return path === router.currentRoute.value.path;
 
     }
     const handlePageChange = (page) => {
+      drawer.value = true;
+      rail.value = false;
       router.push(`/${page}`);
-    }
-
-    return {handlePageChange,isActive,user}
-  },
-  data() {
-    return {
-      drawer: true,
-      rail: true,
-      logo: require('../assets/parleto_logo.png'),
-    }
+    };
+    return {handlePageChange,isActive,user,drawer,rail,logo}
   },
 }
 </script>
 
-<style scoped lang="scss">
-$primary-color: #06dec3;
-
-.navigation {
-  z-index: 10;
-  height: 100vh;
-  width: 15rem;
-}
-
-.navigation__header {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.navigation__logo {
-  padding-top: 3rem;
-}
-
-.navigation__content {
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
-  height: 100%;
-}
-
-.navigation__links-list {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  list-style-type: none;
-
-}
-
-.navigation__single-link {
-  width: fit-content;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-align: left;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: $primary-color;
-  border-bottom: 2px solid transparent;
-  transition: .3s ease;
-
-  &:hover {
-    .navigation__link-text {
-      text-shadow: 0 0 8px $primary-color;
-    }
-  }
-
-  &:last-child {
-    position: absolute;
-    bottom: 2rem;
-  }
-}
-
-.navigation__single-link--active {
-  border-bottom: 2px solid $primary-color;
-
-}
-
-.navigation-icon {
-  min-width: 22px;
-  transition: .2s ease;
-}
-
-.navigation__link-text {
-  transition: .2s ease;
-}
-
-.nav {
-  position: absolute;
-  z-index: 100;
-}
-
-.font-color{
-  color:#06dec3
-}
-
-
-img {
-  width: 11rem;
-}
+<style lang="scss" scoped>
+@import "@/styles/styling.scss";
 </style>

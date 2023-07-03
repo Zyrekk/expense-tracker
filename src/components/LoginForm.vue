@@ -82,7 +82,7 @@ export default {
     const visible = ref(false);
     const loginValue = ref('');
     const passwordValue = ref('');
-    const snackbar=ref(false)
+    const snackbar = ref(false)
 
     watch(passwordValue, () => {
       if (passwordValue.value === '') {
@@ -93,27 +93,25 @@ export default {
     const login = (event) => {
       event.preventDefault();
       const user = store.state.userList.find(item => item.login === loginValue.value);
-      if (user!==undefined&&passwordValue.value === user.password) {
-          store.commit('handleChangeUser', loginValue.value)
-          router.push("/profile");
-      }
-      else {
-        snackbar.value=true
-        loginValue.value=''
-        passwordValue.value=''
+      if (user !== undefined && passwordValue.value === user.password) {
+        store.commit('handleChangeUser', loginValue.value)
+        router.push("/profile");
+      } else {
+        snackbar.value = true
+        loginValue.value = ''
+        passwordValue.value = ''
       }
     };
     const toggleLVisibility = () => {
       visible.value = !visible.value
     };
 
-    return {loginValue,snackbar ,passwordValue, visible, toggleLVisibility, login};
+    return {loginValue, snackbar, passwordValue, visible, toggleLVisibility, login};
   },
 };
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #06dec3;
 
 .login {
   overflow: hidden;
