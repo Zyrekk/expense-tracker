@@ -13,7 +13,7 @@
           <v-avatar color="grey" size="150" rounded="50">
             <v-img
                 cover
-                src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                src="https://cdn.pixabay.com/photo/2023/06/26/13/41/wolf-8089783_1280.jpg"
             ></v-img>
           </v-avatar>
           <v-card-text class="text-white text-h5 mb-3">{{ currentUser.name }} {{ currentUser.lastName }}</v-card-text>
@@ -146,6 +146,8 @@ export default {
     const newName=ref(currentUser.value.name)
     const newLastName=ref(currentUser.value.lastName)
 
+
+
     let maxAmount = 0;
     let maxDate = null;
 
@@ -159,16 +161,16 @@ export default {
     const data = ref([
       {
         name: 'latest',
-        price: currentUser.value.expenses[currentUser.value.expenses.length - 1].amount + ' PLN',
-        date: currentUser.value.expenses[currentUser.value.expenses.length - 1].date
+        price: currentUser.value.expenses.length !== 0? currentUser.value.expenses[currentUser.value.expenses.length - 1].amount + ' PLN':'no expenses',
+        date: currentUser.value.expenses.length !== 0?currentUser.value.expenses[currentUser.value.expenses.length - 1].date:'',
       },
       {
         name: 'most',
-        price: maxAmount + ' PLN',
-        date: maxDate
+        price: currentUser.value.expenses.length !== 0?maxAmount + ' PLN':'no expenses',
+        date: currentUser.value.expenses.length !== 0?maxDate:''
       }]);
     const hasSaved = ref(false);
-    const isEditing = ref(false);
+    const isEditing = ref(true);
 
     const edit = () => {
       isEditing.value = !isEditing.value;

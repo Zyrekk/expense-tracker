@@ -79,8 +79,8 @@
       >
         <v-list-item
             class="pt-10 font-color"
-            prepend-avatar="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-            title="John Leider"
+            prepend-avatar="https://cdn.pixabay.com/photo/2023/06/26/13/41/wolf-8089783_1280.jpg"
+            :title="user.name +' '+user.lastName"
             nav
         >
           <template v-slot:append>
@@ -125,6 +125,10 @@ export default {
   },
   setup() {
     const router=useRouter()
+    const store=useStore()
+    const currentUserName = ref(store.state.currentUserName);
+    const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
+    const user = index!==-1? store.state.userList[index]:{name:'no',lastName: 'name'}
     const isActive=(path)=>{
       return path === router.currentRoute.value.path;
 
@@ -133,7 +137,7 @@ export default {
       router.push(`/${page}`);
     }
 
-    return {handlePageChange,isActive}
+    return {handlePageChange,isActive,user}
   },
   data() {
     return {

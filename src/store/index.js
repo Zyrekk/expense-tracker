@@ -11,7 +11,7 @@ export default createStore({
             description: "My car is broken",
             summary: 1276,
         }],
-        currentUserName: 'marcel',
+        currentUserName: 'test',
         userList: [{
             login: "test",
             password: "test",
@@ -72,6 +72,72 @@ export default createStore({
                     amount: 60,
                     date: '2022-09-10'
                 },
+                {
+                    category: 'mountain',
+                    name: 'mountain',
+                    amount: 40,
+                    date: '2023-01-16'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2023-02-03'
+                },
+                {
+                    category: 'mountain',
+                    name: 'mountain',
+                    amount: 40,
+                    date: '2023-04-16'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2023-05-03'
+                },
+                {
+                    category: 'mountain',
+                    name: 'mountain',
+                    amount: 40,
+                    date: '2023-06-16'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2023-07-03'
+                },
+                {
+                    category: 'mountain',
+                    name: 'mountain',
+                    amount: 40,
+                    date: '2023-08-16'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2023-09-03'
+                },
+                {
+                    category: 'mountain',
+                    name: 'mountain',
+                    amount: 40,
+                    date: '2023-10-16'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2023-11-03'
+                },
+                {
+                    category: 'food',
+                    name: 'bread',
+                    amount: 8,
+                    date: '2019-11-03'
+                },
 
             ],
             categoriesList: [
@@ -86,23 +152,23 @@ export default createStore({
             ],
         },
             {
-                login: "marcel",
-                password: "marcel",
+                login: "user",
+                password: "user",
                 name: 'Marcel',
                 lastName: 'Sabitzer',
                 expenses: [
-                    {
-                        category: 'mountain',
-                        name: 'mountain',
-                        amount: 40,
-                        date: '2022-07-16'
-                    },
-                    {
-                        category: 'food',
-                        name: 'bread',
-                        amount: 8,
-                        date: '2022-08-03'
-                    },
+                    // {
+                    //     category: 'mountain',
+                    //     name: 'mountain',
+                    //     amount: 40,
+                    //     date: '2022-07-16'
+                    // },
+                    // {
+                    //     category: 'food',
+                    //     name: 'bread',
+                    //     amount: 8,
+                    //     date: '2022-08-03'
+                    // },
 
                 ],
                 categoriesList: [
