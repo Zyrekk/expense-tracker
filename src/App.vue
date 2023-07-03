@@ -1,9 +1,8 @@
 <template>
-
   <router-view v-slot="{ Component }">
     <NavigationBar v-if="this.$route.path!=='/login'&&this.$route.path!=='/register'" />
     <transition name="route" mode="out-in">
-      <component :is="Component"></component>
+      <component :is="Component"/>
     </transition>
   </router-view>
 </template>
