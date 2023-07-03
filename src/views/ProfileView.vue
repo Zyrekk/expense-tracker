@@ -12,7 +12,3 @@ export default {
   components: {MainProfile}
 }
 </script>
-
-<style scoped>
-
-</style>

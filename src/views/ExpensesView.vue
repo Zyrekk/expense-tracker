@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ExpenseForm></ExpenseForm>
+    <ExpenseForm/>
   </div>
 </template>
 
@@ -11,7 +11,3 @@ export default {
   components:{ExpenseForm}
 }
 </script>
-
-<style scoped>
-
-</style>

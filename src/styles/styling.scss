@@ -1,0 +1,138 @@
+$primary-color: #06dec3;
+
+.container__settings{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  background: #1b1b1b;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  background: #1b1b1b;
+}
+
+.container__content {
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 50px 20px 50px 76px;
+  width: 70%;
+}
+
+.container__background{
+  gap: 20px;
+  background: #06dec3;
+}
+
+.container__font-size {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.navigation {
+  z-index: 10;
+  height: 100vh;
+  width: 15rem;
+}
+
+.navigation__header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.navigation__logo {
+  padding-top: 3rem;
+}
+
+.navigation__content {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+  height: 100%;
+}
+
+.navigation__links-list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  list-style-type: none;
+
+}
+
+.navigation__single-link {
+  width: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: $primary-color;
+  border-bottom: 2px solid transparent;
+  transition: .3s ease;
+
+  &:hover {
+    .navigation__link-text {
+      text-shadow: 0 0 8px $primary-color;
+    }
+  }
+
+  &:last-child {
+    position: absolute;
+    bottom: 2rem;
+  }
+}
+
+.navigation__single-link--active {
+  border-bottom: 2px solid $primary-color;
+
+}
+
+.navigation-icon {
+  min-width: 22px;
+  transition: .2s ease;
+}
+
+.navigation__link-text {
+  transition: .2s ease;
+}
+
+.nav {
+  position: absolute;
+  z-index: 100;
+}
+
+.font-color{
+  color:#06dec3
+}
+
+.custom-width{
+  width: 50%;
+}
+
+img {
+  width: 11rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .custom-width{
+    width: 100%;
+  }
+}
+

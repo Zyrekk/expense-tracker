@@ -146,6 +146,10 @@ export default createStore({
                     description: 'eating out'
                 },
                 {
+                    name: 'mountain',
+                    description: 'mountains'
+                },
+                {
                     name: 'car',
                     description: 'audi expenses'
                 },
@@ -199,6 +203,12 @@ export default createStore({
         },
         handleExpenseAdd(state, payload) {
             state.userList[payload.index].expenses.push(payload.expense)
+        },
+        handleChangePassword(state,payload){
+            state.userList[payload.index].password=payload.password
+        },
+        handleDeleteAccount(state,payload){
+            state.userList.splice(payload.index, 1);
         }
     },
     actions: {},

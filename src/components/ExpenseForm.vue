@@ -1,13 +1,13 @@
 <template>
-  <div class="expense">
-    <div class="expense__content">
-      <form class="w-75" v-on:submit="addExpense($event)">
+  <div class="container">
+    <div class="container__content d-flex flex-column">
+      <form class="custom-width" v-on:submit="addExpense($event)">
         <v-card
             class="bg-white"
         >
           <v-row>
             <v-col>
-              <v-card-text class="title"
+              <v-card-text class="container__font-size d-flex justify-center align-center container__background"
               >
                 Add a new expense
               </v-card-text>
@@ -64,12 +64,12 @@
           </v-btn>
         </v-card>
       </form>
-      <div class="w-75 d-flex flex-column">
+      <div class="custom-width d-flex flex-column">
         <v-card class="w-100 d-flex flex-column mt-10">
-          <div class="d-flex justify-center w-100 py-5 background">
-            <v-icon prepend>mdi-filter-outline</v-icon>
-            <h3 class="font-weight-light">Filters</h3>
-          </div>
+            <v-card-text class="container__font-size d-flex justify-center align-center container__background"
+            >
+              <v-icon prepend>mdi-filter-outline</v-icon> Filters
+            </v-card-text>
           <v-select
               chips
               v-model="selectedCategories"
@@ -97,9 +97,10 @@
           </v-card>
         </v-card>
         <v-card class="mt-10">
-          <div class="d-flex justify-center w-100 py-5 background">
-            <h3 class="font-weight-light">Expenses</h3>
-          </div>
+          <v-card-text class="container__font-size d-flex justify-center align-center container__background"
+          >
+            <v-icon prepend>mdi-cash-100</v-icon> Expenses
+          </v-card-text>
           <v-card-title>
             <v-spacer></v-spacer>
             <v-text-field
@@ -239,48 +240,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.expense {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 100%;
-  min-height: 100vh;
-  background: #1b1b1b;
-}
-
-.expense__content {
-  display: flex;
-  position: relative;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-
-  margin: 50px 20px 50px 76px;
-  width: 70%;
-}
-
-.title {
-  font-size: 18px;
-  background: #06dec3;
-}
-
-.background {
-  background: #06dec3;
-
-}
-
-.v-table.v-table--fixed-header > .v-table__wrapper > table > thead > tr > th {
-  background: #06dec3;
-  text-wrap: normal;
-  color: black;
-}
-
-.card {
-  border-radius: 5px;
-  width: 500px;
-  height: 100%;
-}
+@import "@/styles/styling.scss";
 
 </style>

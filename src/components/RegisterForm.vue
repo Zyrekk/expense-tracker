@@ -92,7 +92,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #06dec3;
 
 .register {
   overflow: hidden;

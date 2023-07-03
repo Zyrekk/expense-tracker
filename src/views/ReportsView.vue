@@ -12,7 +12,3 @@ export default {
   components:{ReportOverview}
 }
 </script>
-
-<style scoped>
-
-</style>
