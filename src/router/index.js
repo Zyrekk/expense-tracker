@@ -4,6 +4,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import ExpensesView from "@/views/ExpensesView.vue";
+import ReportsView from "@/views/ReportsView.vue";
 
 const routes = [
   {
@@ -34,6 +35,11 @@ const routes = [
     path: '/expenses',
     name: 'expenses',
     component: ExpensesView
+  },
+  {
+    path: '/reports',
+    name: 'reports',
+    component: ReportsView
   },
   {
     path: '/:pathMatch(.*)*',

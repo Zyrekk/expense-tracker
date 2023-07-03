@@ -54,7 +54,7 @@
                   v-model="expenseDate"
                   type="date"
                   label="Date"
-                  :max="maxDate"
+                  :max="new Date().toISOString().split('T')[0]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -72,34 +72,35 @@
           </div>
           <v-select
               chips
+              v-model="selectedCategories"
               class="px-5 py-5 text-left"
               label="Category"
-              :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+              :items="categories"
               multiple
           ></v-select>
           <v-card class="w-100 d-flex flex-wrap">
             <v-text-field
                 class="px-5"
                 required
-                v-model="filterMinDate"
+                v-model="minDateInput"
                 type="date"
                 label="Start date"
-                :max="filterMaxDate"
             ></v-text-field>
             <v-text-field
                 class=" px-5"
                 required
-                v-model="filterMaxDate"
+                v-model="maxDateInput"
                 type="date"
                 label="End date"
-                :min="filterMinDate"
-                :max="maxDate"
+                :max="new Date().toISOString().split('T')[0]"
             ></v-text-field>
           </v-card>
         </v-card>
-        <v-card>
+        <v-card class="mt-10">
+          <div class="d-flex justify-center w-100 py-5 background">
+            <h3 class="font-weight-light">Expenses</h3>
+          </div>
           <v-card-title>
-            Nutrition
             <v-spacer></v-spacer>
             <v-text-field
                 v-model="search"
@@ -110,53 +111,21 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table
+              class="pb-5"
               :headers="headers"
-              :items="desserts"
+              :items="filteredExpenses"
               :search="search"
           ></v-data-table>
         </v-card>
-<!--        <v-table-->
-<!--            fixed-header-->
-<!--            height="512"-->
-<!--            class="w-100 rounded my-10"-->
-<!--        >-->
-<!--          <thead class="rounded">-->
-<!--          <tr>-->
-<!--            <th class="text-center text-wrap">-->
-<!--              Category-->
-<!--            </th>-->
-<!--            <th class="text-center  text-wrap">-->
-<!--              Name-->
-<!--            </th>-->
-<!--            <th class="text-center  text-wrap">-->
-<!--              Amount-->
-<!--            </th>-->
-<!--            <th class="text-center text-wrap">-->
-<!--              Date-->
-<!--            </th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr-->
-<!--              v-for="item in expenses"-->
-<!--              :key="item.name"-->
-<!--          >-->
-<!--            <td class="mb-10">{{ item.category }}</td>-->
-<!--            <td class="mb-10">{{ item.name }}</td>-->
-<!--            <td class="mb-10">{{ item.amount }} PLN</td>-->
-<!--            <td class="mb-10">{{ item.date }}</td>-->
-<!--          </tr>-->
-<!--          </tbody>-->
-<!--        </v-table>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {useStore} from "vuex";
-import { VDataTable } from 'vuetify/labs/VDataTable'
+import {VDataTable} from 'vuetify/labs/VDataTable'
 
 export default {
   name: "ExpenseForm",
@@ -169,20 +138,67 @@ export default {
       behavior: 'smooth'
     });
     const store = useStore()
+
     const currentUserName = ref(store.state.currentUserName);
+
+    const expenseCategory = ref('')
+
+    const expenseName = ref('')
+
+    const expenseAmount = ref(10)
+
+    const expenseDate = ref(new Date().toISOString().split('T')[0])
+
     const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
+
     const categories = ref(store.state.userList[index].categoriesList.map((item) => {
       return item.name
     }))
-    const expenses = ref(store.state.userList[index].expenses)
-    const expenseCategory = ref('')
-    const expenseName = ref('')
-    const expenseAmount = ref(10)
-    const expenseDate = ref('')
-    const maxDate = new Date().toISOString().split('T')[0]
-    const filterMinDate = ref(new Date().toISOString().split('T')[0])
-    const filterMaxDate = ref(new Date().toISOString().split('T')[0])
 
+    const selectedCategories=ref(categories.value)
+
+
+
+    const expenses = computed(() => {
+      return store.state.userList[index].expenses.filter(expense => selectedCategories.value.includes(expense.category));
+    });
+
+    const smallestDate = computed(() => {
+      if (expenses.value.length === 0) {
+        return new Date().toISOString().split('T')[0]; // Jeśli expenses są puste, ustaw dzisiejszą datę
+      } else {
+        expenses.value.sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
+        return  expenses.value[0].date
+      }
+    });
+    const minDateInput=ref(new Date(smallestDate.value).toISOString().split('T')[0])
+    watch(smallestDate,()=>{
+      console.log(smallestDate.value)
+      minDateInput.value=new Date(smallestDate.value).toISOString().split('T')[0]
+    })
+
+    const maxDateInput=ref(new Date().toISOString().split('T')[0])
+
+
+    const filteredExpenses = computed(() => {
+      return expenses.value.filter(expense=> expense.date>=minDateInput.value&&expense.date<=maxDateInput.value)
+    });
+
+
+    const search = ref('');
+
+    const headers = [
+      {
+        align: 'center',
+        key: 'category',
+        title: 'Category',
+      },
+      {align: 'center', key: 'name', title: 'Name'},
+      {align: 'center', key: 'amount', title: 'Amount'},
+      {align: 'center', key: 'date', title: 'Date'},
+    ]
 
     const addExpense = (event) => {
       event.preventDefault();
@@ -192,7 +208,7 @@ export default {
           expense: {
             category: expenseCategory.value,
             name: expenseName.value,
-            amount: expenseAmount.value,
+            amount: Number(expenseAmount.value),
             date: expenseDate.value
           },
           index: indexToAdd
@@ -200,120 +216,23 @@ export default {
         expenseCategory.value = ''
         expenseName.value = ''
         expenseAmount.value = 0
-        expenseDate.value = ''
+        expenseDate.value = new Date().toISOString().split('T')[0]
       }
     }
     return {
-      filterMinDate,
-      filterMaxDate,
-      maxDate,
+      smallestDate,
+      selectedCategories,
+      search,
+      headers,
+      minDateInput,
+      maxDateInput,
       categories,
-      expenses,
       expenseCategory,
       expenseName,
       expenseAmount,
       expenseDate,
-      addExpense
-    }
-  },
-  data() {
-    return {
-      search: '',
-      headers: [
-        {
-          align: 'start',
-          key: 'name',
-          sortable: false,
-          title: 'Dessert (100g serving)',
-        },
-        { key: 'calories', title: 'Calories' },
-        { key: 'fat', title: 'Fat (g)' },
-        { key: 'carbs', title: 'Carbs (g)' },
-        { key: 'protein', title: 'Protein (g)' },
-        { key: 'iron', title: 'Iron (%)' },
-      ],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: 1,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: 1,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: 7,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: 8,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: 16,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: 0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: 2,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: 45,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: 22,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: 6,
-        },
-      ],
+      filteredExpenses,
+      addExpense,
     }
   },
 }

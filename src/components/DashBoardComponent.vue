@@ -1,76 +1,73 @@
 <template>
-  <div class="dashboard">
-    <v-card
-        class="card"
-        color="#1b1b1b"
-        width="100%"
-        rounded
-        flat
-    >
-      <v-card class="pt-16 card__flex" width="100%" flat>
-        <div class="card-content">
-          <div class="card-content__left">
-            <v-card class="width" height="60%" color="">
-              <v-toolbar color="#06dec3" height="30%">
-                <v-card-text class="font-size">Add a new expense category</v-card-text>
-              </v-toolbar>
+  <div class="dashboard pt-16">
+    <div class="dashboard__content pt-10">
+      <div class="w-75">
+        <v-card class="w-100">
+          <v-toolbar color="#06dec3" height="30%">
+            <v-card-text class="font-size">Add a new expense category</v-card-text>
+          </v-toolbar>
 
-              <v-card-text>
+          <v-card-text>
 
 
-                <v-text-field
-                    class="font-color input-height"
-                    base-color="black"
-                    color="#06dec3"
-                    variant="outlined"
-                    label="Category"
-                    placeholder="Category"
-                    v-model="category"
-                    density="compact"
-                ></v-text-field>
+            <v-text-field
+                class="font-color input-height"
+                base-color="black"
+                color="#06dec3"
+                variant="outlined"
+                label="Category"
+                placeholder="Category"
+                v-model="category"
+                density="compact"
+            ></v-text-field>
 
 
-                <v-textarea
-                    base-color="black"
-                    color="#06dec3"
-                    variant="outlined"
-                    label="Description"
-                    class="font-color"
-                    placeholder="Description"
-                    no-resize
-                    density="compact"
-                    v-model="description"
-                ></v-textarea>
-              </v-card-text>
+            <v-textarea
+                base-color="black"
+                color="#06dec3"
+                variant="outlined"
+                label="Description"
+                class="font-color"
+                placeholder="Description"
+                no-resize
+                density="compact"
+                v-model="description"
+            ></v-textarea>
+          </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="#06dec3"
-                    variant="elevated"
-                    type="submit" @click="handleAddItem"> Add</v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card color="#1b1b1b" class="width" flat>
-              <v-card-text class="pt-15 mb-0 text-white font-size__chart">Expense Categories</v-card-text>
-              <v-expansion-panels color="#06dec3" variant="inset" class="d-inline-block  my-4">
-                <v-expansion-panel
-                    class="mt-2"
-                    v-for="i in categoryList"
-                    :key="i"
-                    :title="i.name"
-                    :text="i.description"
-                ></v-expansion-panel>
-              </v-expansion-panels>
-            </v-card>
-          </div>
-          <v-card color="#1b1b1b" class="chart-size mt-16 d-flex flex-column" flat>
-            <span class="pt-15 height mb-0 text-white font-size__chart">Quick overview of expenses</span>
-            <canvas id="myChart"></canvas>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="#06dec3"
+                variant="elevated"
+                type="submit" @click="handleAddItem"> Add
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-card color="#1b1b1b" class="w-100" flat>
+          <v-card-text v-if="!categoryList.length" class="text-red-accent-2 pt-15 mb-0 text-white font-size">Add categories to see a list of categories
+          </v-card-text>
+          <v-card-text v-if="categoryList.length" class="pt-15 mb-0 text-white font-size">Expense Categories
+          </v-card-text>
+          <v-expansion-panels color="#06dec3" variant="inset" class="d-inline-block  my-4">
+            <v-expansion-panel
+                class="mt-2"
+                v-for="i in categoryList"
+                :key="i"
+                :title="i.name"
+                :text="i.description"
+            ></v-expansion-panel>
+          </v-expansion-panels>
+        </v-card>
+        <v-card-text v-if="!expenses.length" class="text-red-accent-2 pt-15 mb-0 text-white font-size">Add expenses to see an expense chart</v-card-text>
+        <v-card v-if="expenses.length" color="#1b1b1b" class="w-100 d-flex flex-column align-center" flat>
+          <v-card-text class="pt-15 mb-0 text-white font-size">Expenses overview</v-card-text>
+          <v-card color="#1b1b1b" class="chart-size">
+            <canvas v-if="categoryList.length" id="myChart"></canvas>
           </v-card>
-        </div>
-      </v-card>
-    </v-card>
+        </v-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,13 +80,14 @@ import {useStore} from "vuex";
 export default {
   name: "DashboardComponent",
   mounted() {
-    const store=useStore();
+    const store = useStore();
     const ctx = document.getElementById('myChart');
     const categoryData = {};
     const currentUserName = ref(store.state.currentUserName);
-    const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+    const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
+    const expenses=store.state.userList[index].expenses
 
-    store.state.userList[index].expenses.forEach(expense => {
+    expenses.forEach(expense => {
       if (!categoryData[expense.category]) {
         categoryData[expense.category] = {
           name: expense.category,
@@ -101,23 +99,25 @@ export default {
 
     const result = Object.values(categoryData);
     console.log(result)
-    const categories=result.map((item)=>{
+    const categories = result.map((item) => {
       return item.name
     })
-    const chartValues=result.map((item)=>{
+    const chartValues = result.map((item) => {
       return item.amount
     })
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: categories,
-        datasets: [{
-          label: 'Summary cost in PLN ',
-          data: chartValues,
-          borderWidth: 1
-        }]
-      },
-    });
+    if (categories.length) {
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: categories,
+          datasets: [{
+            label: 'Summary cost in PLN ',
+            data: chartValues,
+            borderWidth: 1
+          }]
+        },
+      });
+    }
   },
   setup() {
     window.scrollTo({
@@ -128,16 +128,17 @@ export default {
     const store = useStore()
     const currentUserName = ref(store.state.currentUserName);
     // const currentUser = ref(store.state.userList.find(item => item.login === currentUserName.value));
-    const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
-    const categoryList=ref(store.state.userList[index].categoriesList)
+    const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
+    const categoryList = ref(store.state.userList[index].categoriesList)
     const category = ref('')
     const description = ref('')
+    const expenses=store.state.userList[index].expenses
 
     const handleAddItem = () => {
-      const indexToAdd=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+      const indexToAdd = store.state.userList.findIndex((element) => element.login === currentUserName.value)
       store.commit('handleCategoryAdd', {
         index: indexToAdd,
-        category:{
+        category: {
           name: category.value,
           description: description.value
         }
@@ -146,7 +147,7 @@ export default {
       description.value = ''
     }
 
-    return {categoryList, category, description, handleAddItem}
+    return {categoryList, category, description,expenses, handleAddItem}
   }
 }
 </script>
@@ -157,72 +158,35 @@ export default {
   font-weight: 500;
 }
 
-.font-size__chart{
-  font-size: 24px;
-  padding-bottom: 40px;
-  font-weight: 500;
-}
-
-.height{
-  height: fit-content;
-  line-height: 1.25rem;
-}
-
-.chart-size{
+.chart-size {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
 }
 
-.width {
-  width: 60%;
-}
-
-.font-color {
-  color: #595959;
-}
-
 .dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   width: 100%;
   min-height: 100vh;
   background: #1b1b1b;
-  display: flex;
 }
 
-.card__flex {
-  background: #1b1b1b;
-  width: 100%;
+.dashboard__content {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-content {
-  display: flex;
-  border-radius: 10px 10px 0 0;
   position: relative;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
   margin: 50px 20px 50px 76px;
   width: 70%;
 }
 
-.card-content__left{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: fit-content;
-  width: 100%;
-}
-
 @media only screen and (max-width: 768px) {
-  .width {
-    width: 100%;
-  }
-  .font-size {
-    font-size: 18px;
-  }
-  .card-content{
-    flex-direction: column;
-  }
-  .chart-size{
+  .chart-size {
     width: 100%;
   }
 }
