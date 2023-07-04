@@ -22,11 +22,13 @@ User can register after entering the e-mail address, login and password
 ## Pages required auth
 ### /profile
 ```
-After the first login, the user will be redirected to the profile page in order to complete the name and surname. You can modify them at a later stage. Requires authorization after logging in
+After the first login, the user will be redirected to the profile page in order to complete
+the name and surname. You can modify them at a later stage. Requires authorization after logging in
 ```
 ### /dashboard
 ```
-User can add new expense categories here and view them, and if he has expenses, he can see their short summary on the chart
+User can add new expense categories here and view them, and if he has expenses, 
+he can see their short summary on the chart
 ```
 ### /expenses
 ```
