@@ -8,6 +8,7 @@ export default createStore({
             password: "test",
             name: 'John',
             lastName: 'Miller',
+            firstTime:false,
             expenses: [
                 {
                     category: 'food',
@@ -171,6 +172,9 @@ export default createStore({
         },
         handleAddUser(state,payload){
             state.userList.push(payload)
+        },
+        handleFirstTimeChange(state,payload){
+            state.userList[payload].firstTime=false
         }
     },
     actions: {},

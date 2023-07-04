@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <div class="mx-3">
+    <form class="mx-3" v-on:submit="register($event)">
       <v-card
           class="mx-auto pt-5 px-12 pb-8 register__font-color"
           elevation="8"
@@ -16,7 +16,9 @@
         <div class="text-h6 ">Registration</div>
 
         <v-text-field
+            type="email"
             v-model="emailValue"
+            required="true"
             density="compact"
             placeholder="Email address"
             clearable
@@ -27,6 +29,7 @@
         <v-text-field
             v-model="loginValue"
             density="compact"
+            required="true"
             placeholder="Login"
             clearable
             prepend-inner-icon="mdi-account-outline"
@@ -36,6 +39,7 @@
         <v-text-field
             v-model="passwordValue"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+            required="true"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password"
@@ -47,11 +51,11 @@
 
 
         <v-btn
-            @click="register"
             block
             class="mb-8"
             color="#06dec3"
             size="large"
+            type="submit"
         >
           Register
         </v-btn>
@@ -63,7 +67,7 @@
           </router-link>
         </v-card-text>
       </v-card>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -97,8 +101,9 @@ export default {
         const newUser = {
           login: loginValue.value,
           password: passwordValue.value,
-          name: 'Example',
-          lastName: 'User',
+          name: '',
+          lastName: '',
+          firstTime:true,
           expenses: [],
           categoriesList: [],
         }

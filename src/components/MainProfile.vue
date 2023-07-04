@@ -1,5 +1,34 @@
 <template>
   <div class="profile">
+    <v-dialog v-model="dialog"
+              persistent="true"
+              width="auto">
+      <v-card width="auto">
+        <v-card-text class="container__font-size d-flex justify-center align-center container__background"
+        >
+          Fill in the first and last name
+        </v-card-text>
+        <v-card-text class="d-flex flex-column">
+          <v-text-field
+              v-model="dialogName"
+              label="First name"
+              required
+          ></v-text-field>
+
+          <v-text-field
+              v-model="dialogLastName"
+              label="Last name"
+              required
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn class="mx-auto" variant="elevated" :color="color" @click="handleCloseDialog"
+          >{{ text }}
+          </v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-card
         class="card d-flex justify-center"
         height="100%"
@@ -119,13 +148,20 @@
           </v-card>
         </div>
       </v-card>
+      <v-snackbar
+          :color="snackbar.snackBarColor"
+          v-model="snackbar.active"
+          :timeout="2000"
+      >
+        {{snackbar.snackBarText}}
+      </v-snackbar>
     </v-card>
   </div>
 </template>
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
-import {ref} from "vue";
+import {reactive, ref, toRefs, watch} from "vue";
 import {useStore} from "vuex";
 
 export default {
@@ -141,10 +177,29 @@ export default {
     const tab = ref(null);
     const currentUserName = ref(store.state.currentUserName);
     const currentUser = ref(store.state.userList.find(item => item.login === currentUserName.value));
-    const newName=ref(currentUser.value.name)
-    const newLastName=ref(currentUser.value.lastName)
+    const newName = ref(currentUser.value.name)
+    const newLastName = ref(currentUser.value.lastName)
+    const dialog = ref(false)
+    const dialogName = ref('')
+    const dialogLastName = ref('')
+    const dialogButton = reactive({
+      text: 'Close',
+      color: 'red',
+    })
+    const snackbarData=reactive({
+      snackbar:{
+        active:false,
+        snackBarColor:'',
+        snackBarText:''
+      },
+    })
 
-
+    watch([dialogName, dialogLastName], () => {
+      if (dialogName.value !== '' && dialogLastName.value !== '') {
+        dialogButton.text = 'Save'
+        dialogButton.color = '#06dec3'
+      }
+    })
 
     let maxAmount = 0;
     let maxDate = null;
@@ -159,39 +214,87 @@ export default {
     const data = ref([
       {
         name: 'latest',
-        price: currentUser.value.expenses.length !== 0? currentUser.value.expenses[currentUser.value.expenses.length - 1].amount + ' PLN':'no expenses',
-        date: currentUser.value.expenses.length !== 0?currentUser.value.expenses[currentUser.value.expenses.length - 1].date:'',
+        price: currentUser.value.expenses.length !== 0 ? currentUser.value.expenses[currentUser.value.expenses.length - 1].amount + ' PLN' : 'no expenses',
+        date: currentUser.value.expenses.length !== 0 ? currentUser.value.expenses[currentUser.value.expenses.length - 1].date : '',
       },
       {
         name: 'most',
-        price: currentUser.value.expenses.length !== 0?maxAmount + ' PLN':'no expenses',
-        date: currentUser.value.expenses.length !== 0?maxDate:''
+        price: currentUser.value.expenses.length !== 0 ? maxAmount + ' PLN' : 'no expenses',
+        date: currentUser.value.expenses.length !== 0 ? maxDate : ''
       }]);
     const hasSaved = ref(false);
-    const isEditing = ref(true);
+    const isEditing = ref(false);
+
+    if (currentUser.value.firstTime === true) {
+      setTimeout(() => {
+        dialog.value = true
+      }, 1000);
+    }
+
+    const handleCloseDialog = () => {
+      if (dialogName.value !== '' && dialogLastName.value !== '') {
+        const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
+        store.commit('handleUserDetailsChange', {
+          login: currentUserName.value,
+          name: dialogName.value,
+          lastName: dialogLastName.value,
+          index: index
+        });
+        newName.value=dialogName.value
+        newLastName.value=dialogLastName.value
+        dialog.value = false
+        store.commit('handleFirstTimeChange', index);
+        snackbarData.snackbar.snackBarColor='green'
+        snackbarData.snackbar.active=true
+        snackbarData.snackbar.snackBarText="Profile Updated"
+      }
+      else{
+        snackbarData.snackbar.snackBarColor='red'
+        snackbarData.snackbar.active=true
+        snackbarData.snackbar.snackBarText="Fill in the first and last name"
+      }
+    }
 
     const edit = () => {
       isEditing.value = !isEditing.value;
     }
+
     const save = () => {
-      const index=store.state.userList.findIndex((element) => element.login === currentUserName.value)
+      const index = store.state.userList.findIndex((element) => element.login === currentUserName.value)
 
       store.commit('handleUserDetailsChange', {
         login: currentUserName.value,
-        name: newName.value?newName.value:currentUser.value.name,
-        lastName: newLastName.value?newLastName.value:currentUser.value.lastName,
+        name: newName.value ? newName.value : currentUser.value.name,
+        lastName: newLastName.value ? newLastName.value : currentUser.value.lastName,
         index: index
       });
       hasSaved.value = true;
-      isEditing.value=false
+      isEditing.value = false
     }
 
-    return {currentUser,newName,newLastName, hasSaved, isEditing, tab, data, edit, save}
-  }
+    return {
+      ...toRefs(snackbarData),
+      ...toRefs(dialogButton),
+      dialogName,
+      dialogLastName,
+      currentUser,
+      newName,
+      newLastName,
+      hasSaved,
+      isEditing,
+      tab,
+      data,
+      dialog,
+      edit,
+      save,
+      handleCloseDialog,
+    }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/styling.scss";
 
 .profile {
   overflow: hidden;
