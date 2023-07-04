@@ -1,13 +1,28 @@
 <template>
-  <NavigationBar v-if="this.$route.path!=='/login'&&this.$route.path!=='/register'"/>
+  <NavigationBar v-if="route!=='/login'&&route!=='/register'"/>
   <router-view v-slot="{ Component }">
-    <transition name="fade">
-      <component :is="Component"/>
+    <transition name="route" mode="out-in">
+      <component :is="Component"></component>
     </transition>
   </router-view>
 </template>
-<script setup>
+<script>
 import NavigationBar from "@/components/NavigationBar.vue";
+import {useRouter} from "vue-router";
+import {ref, watch} from "vue";
+
+export default {
+  components: { NavigationBar },
+  setup() {
+    const router = useRouter();
+    const route = ref(router.currentRoute.value.path);
+    watch(() => router.currentRoute.value.path, (newPath) => {
+      route.value=newPath
+    });
+
+    return { route };
+  },
+};
 </script>
 
 <style>
