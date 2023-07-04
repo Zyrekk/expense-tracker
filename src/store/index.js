@@ -2,16 +2,7 @@ import {createStore} from 'vuex'
 
 export default createStore({
     state: {
-        categories: [{
-            name: "food",
-            description: "I like eat pizza",
-            summary: 1576,
-        }, {
-            name: "car",
-            description: "My car is broken",
-            summary: 1276,
-        }],
-        currentUserName: 'test',
+        currentUserName: '',
         userList: [{
             login: "test",
             password: "test",
@@ -155,38 +146,6 @@ export default createStore({
                 },
             ],
         },
-            {
-                login: "user",
-                password: "user",
-                name: 'Marcel',
-                lastName: 'Sabitzer',
-                expenses: [
-                    // {
-                    //     category: 'mountain',
-                    //     name: 'mountain',
-                    //     amount: 40,
-                    //     date: '2022-07-16'
-                    // },
-                    // {
-                    //     category: 'food',
-                    //     name: 'bread',
-                    //     amount: 8,
-                    //     date: '2022-08-03'
-                    // },
-
-                ],
-                categoriesList: [
-                    {
-                        name: 'food',
-                        description: 'eating out'
-                    },
-                    {
-                        name: 'mountain',
-                        description: 'hobby'
-                    },
-                ],
-            },
-
         ],
     },
     getters: {},
@@ -209,6 +168,9 @@ export default createStore({
         },
         handleDeleteAccount(state,payload){
             state.userList.splice(payload.index, 1);
+        },
+        handleAddUser(state,payload){
+            state.userList.push(payload)
         }
     },
     actions: {},

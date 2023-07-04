@@ -47,7 +47,6 @@
               <v-text-field
                   :disabled="!isEditing"
                   base-color="black"
-                  color="#06dec3"
                   label="Name"
                   v-model="newName"
                   :model-value="newName"
@@ -56,7 +55,6 @@
               <v-text-field
                   :disabled="!isEditing"
                   base-color="black"
-                  color="#06dec3"
                   label="Last name"
                   v-model="newLastName"
                   :model-value="newLastName"

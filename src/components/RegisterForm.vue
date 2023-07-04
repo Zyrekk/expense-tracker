@@ -16,7 +16,7 @@
         <div class="text-h6 ">Registration</div>
 
         <v-text-field
-            v-model="loginValue"
+            v-model="emailValue"
             density="compact"
             placeholder="Email address"
             clearable
@@ -47,6 +47,7 @@
 
 
         <v-btn
+            @click="register"
             block
             class="mb-8"
             color="#06dec3"
@@ -68,12 +69,16 @@
 
 <script>
 import {ref, watch} from "vue";
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 export default {
   name: "RegisterForm",
   setup() {
-
+    const store=useStore()
+    const router=useRouter()
     const visible = ref(false);
+    const emailValue = ref('');
     const loginValue = ref('');
     const passwordValue = ref('');
 
@@ -86,7 +91,26 @@ export default {
       visible.value = !visible.value
     };
 
-    return {loginValue, passwordValue, visible, toggleLVisibility};
+    const register = (event) => {
+      event.preventDefault();
+      if (loginValue.value.length > 0 && passwordValue.value.length > 0 && emailValue.value.length > 0) {
+        const newUser = {
+          login: loginValue.value,
+          password: passwordValue.value,
+          name: 'Example',
+          lastName: 'User',
+          expenses: [],
+          categoriesList: [],
+        }
+        store.commit('handleAddUser', newUser)
+        store.commit('handleChangeUser', loginValue.value)
+        router.push("/profile");
+      } else{
+
+      }
+    };
+
+    return {loginValue, emailValue, passwordValue, visible, toggleLVisibility,register};
   },
 };
 </script>
