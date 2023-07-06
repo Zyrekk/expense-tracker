@@ -42,6 +42,11 @@ On this page, the user finds a summary of expenses by category or date, but also
 ```
 User can change the password and delete the account
 ```
+## Tech Stack
+
+- Vue.js
+- Vuex
+- Vuetify 3
 
 ## Project setup
 ```
